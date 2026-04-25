@@ -1,3 +1,14 @@
+local function shell(cmd)
+    local handle = io.popen(cmd)
+    local result = handle:read("*a")
+    handle:close()
+    return result:match("^%s*(.-)%s*$")
+end
+
+--local wayland_protocols = shell("pkg-config --variable=pkgdatadir wayland-protocols")
+local wayland_protocols = "//usr/share/wayland-protocols"
+local wayland_client_data = shell("pkg-config --variable=pkgdatadir wayland-client")
+
 project "GLFW"
 	kind "StaticLib"
 	language "C"
@@ -34,15 +45,13 @@ project "GLFW"
 		
 		files
 		{
-			"src/x11_init.c",
-			"src/x11_monitor.c",
-			"src/x11_window.c",
+			"src/wl_init.c",
+			"src/wl_monitor.c",
+			"src/wl_window.c",
 			"src/xkb_unicode.c",
 			"src/posix_module.c",
 			"src/posix_time.c",
 			"src/posix_thread.c",
-			"src/posix_module.c",
-			"src/glx_context.c",
 			"src/egl_context.c",
 			"src/osmesa_context.c",
 			"src/linux_joystick.c"
@@ -50,8 +59,31 @@ project "GLFW"
 
 		defines
 		{
-			"_GLFW_X11"
+			"_GLFW_WAYLAND"
 		}
+
+		links
+		{
+			"xkbcommon"
+		}
+
+		prebuildcommands {
+			--"wayland-scanner client-header " .. wayland_client_data .. "/wayland.xml %{prj.location}/src/wayland-client-protocol.h",
+			--"wayland-scanner private-code " .. wayland_client_data .. "/wayland.xml %{prj.location}/src/wayland-client-protocol-code.h",
+            --"wayland-scanner client-header " .. wayland_protocols .. "/stable/xdg-shell/xdg-shell.xml %{prj.location}/src/wayland-xdg-shell-client-protocol.h",
+			--"wayland-scanner private-code " .. wayland_protocols .. "/stable/xdg-shell/xdg-shell.xml %{prj.location}/src/wayland-xdg-shell-client-protocol-code.h",
+            --"wayland-scanner client-header " .. wayland_protocols .. "/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml %{prj.location}/src/wayland-xdg-decoration-client-protocol.h",
+			--"wayland-scanner private-code " .. wayland_protocols .. "/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml %{prj.location}/src/wayland-xdg-decoration-client-protocol-code.h",
+			--"wayland-scanner client-header " .. wayland_protocols .. "/stable/viewporter/viewporter.xml %{prj.location}/src/wayland-viewporter-client-protocol.h",
+			--"wayland-scanner private-code " .. wayland_protocols .. "/stable/viewporter/viewporter.xml %{prj.location}/src/wayland-viewporter-client-protocol-code.h",
+			--"wayland-scanner client-header " .. wayland_protocols .. "/unstable/relative-pointer/relative-pointer-unstable-v1.xml %{prj.location}/src/wayland-relative-pointer-unstable-v1-client-protocol.h",
+			--"wayland-scanner private-code " .. wayland_protocols .. "/unstable/relative-pointer/relative-pointer-unstable-v1.xml %{prj.location}/src/wayland-relative-pointer-unstable-v1-client-protocol-code.h",
+			--"wayland-scanner client-header " .. wayland_protocols .. "/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml %{prj.location}/src/wayland-pointer-constraints-unstable-v1-client-protocol.h",
+			--"wayland-scanner private-code " .. wayland_protocols .. "/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml %{prj.location}/src/wayland-pointer-constraints-unstable-v1-client-protocol-code.h",
+			--"wayland-scanner client-header " .. wayland_protocols .. "/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml %{prj.location}/src/wayland-idle-inhibit-unstable-v1-client-protocol.h",
+			--"wayland-scanner private-code " .. wayland_protocols .. "/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml %{prj.location}/src/wayland-idle-inhibit-unstable-v1-client-protocol-code.h",
+            -- add others as needed
+        }
 
 	filter "system:macosx"
 		pic "On"
