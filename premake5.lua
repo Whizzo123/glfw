@@ -60,6 +60,26 @@ project "GLFW"
 			}
 			defines { "_GLFW_WAYLAND" }
 			links { "xkbcommon" }
+			prebuildcommands {
+				"[ -f %{prj.location}/src/wayland-client-protocol.h ] || wayland-scanner client-header " .. wayland_client_data .. "/wayland.xml %{prj.location}/src/wayland-client-protocol.h",
+				"[ -f %{prj.location}/src/wayland-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_client_data .. "/wayland.xml %{prj.location}/src/wayland-client-protocol-code.h",
+				"[ -f %{prj.location}/src/xdg-shell-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/stable/xdg-shell/xdg-shell.xml %{prj.location}/src/xdg-shell-client-protocol.h",
+				"[ -f %{prj.location}/src/xdg-shell-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/stable/xdg-shell/xdg-shell.xml %{prj.location}/src/xdg-shell-client-protocol-code.h",
+				"[ -f %{prj.location}/src/relative-pointer-unstable-v1-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/unstable/relative-pointer/relative-pointer-unstable-v1.xml %{prj.location}/src/relative-pointer-unstable-v1-client-protocol.h",
+				"[ -f %{prj.location}/src/relative-pointer-unstable-v1-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/unstable/relative-pointer/relative-pointer-unstable-v1.xml %{prj.location}/src/relative-pointer-unstable-v1-client-protocol-code.h",
+				"[ -f %{prj.location}/src/pointer-constraints-unstable-v1-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml %{prj.location}/src/pointer-constraints-unstable-v1-client-protocol.h",
+				"[ -f %{prj.location}/src/pointer-constraints-unstable-v1-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml %{prj.location}/src/pointer-constraints-unstable-v1-client-protocol-code.h",
+				"[ -f %{prj.location}/src/idle-inhibit-unstable-v1-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml %{prj.location}/src/idle-inhibit-unstable-v1-client-protocol.h",
+				"[ -f %{prj.location}/src/idle-inhibit-unstable-v1-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml %{prj.location}/src/idle-inhibit-unstable-v1-client-protocol-code.h",
+				"[ -f %{prj.location}/src/xdg-decoration-unstable-v1-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml %{prj.location}/src/xdg-decoration-unstable-v1-client-protocol.h",
+				"[ -f %{prj.location}/src/xdg-decoration-unstable-v1-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml %{prj.location}/src/xdg-decoration-unstable-v1-client-protocol-code.h",
+				"[ -f %{prj.location}/src/viewporter-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/stable/viewporter/viewporter.xml %{prj.location}/src/viewporter-client-protocol.h",
+				"[ -f %{prj.location}/src/viewporter-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/stable/viewporter/viewporter.xml %{prj.location}/src/viewporter-client-protocol-code.h",
+				"[ -f %{prj.location}/src/fractional-scale-v1-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/staging/fractional-scale/fractional-scale-v1.xml %{prj.location}/src/fractional-scale-v1-client-protocol.h",
+				"[ -f %{prj.location}/src/fractional-scale-v1-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/staging/fractional-scale/fractional-scale-v1.xml %{prj.location}/src/fractional-scale-v1-client-protocol-code.h",
+				"[ -f %{prj.location}/src/xdg-activation-v1-client-protocol.h ] || wayland-scanner client-header " .. wayland_protocols .. "/staging/xdg-activation/xdg-activation-v1.xml %{prj.location}/src/xdg-activation-v1-client-protocol.h",
+				"[ -f %{prj.location}/src/xdg-activation-v1-client-protocol-code.h ] || wayland-scanner private-code " .. wayland_protocols .. "/staging/xdg-activation/xdg-activation-v1.xml %{prj.location}/src/xdg-activation-v1-client-protocol-code.h",
+			}
 		else
 			files
 			{
@@ -79,28 +99,6 @@ project "GLFW"
 			defines { "_GLFW_X11" }
 			links { "xkbcommon", "X11", "Xrandr", "Xi", "Xcursor" }
 		end
-
-		prebuildcommands {
-			"wayland-scanner client-header " .. wayland_client_data .. "/wayland.xml %{prj.location}/src/wayland-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_client_data .. "/wayland.xml %{prj.location}/src/wayland-client-protocol-code.h",
-            "wayland-scanner client-header " .. wayland_protocols .. "/stable/xdg-shell/xdg-shell.xml %{prj.location}/src/xdg-shell-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/stable/xdg-shell/xdg-shell.xml %{prj.location}/src/xdg-shell-client-protocol-code.h",
-			"wayland-scanner client-header " .. wayland_protocols .. "/unstable/relative-pointer/relative-pointer-unstable-v1.xml %{prj.location}/src/relative-pointer-unstable-v1-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/unstable/relative-pointer/relative-pointer-unstable-v1.xml %{prj.location}/src/relative-pointer-unstable-v1-client-protocol-code.h",
-			"wayland-scanner client-header " .. wayland_protocols .. "/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml %{prj.location}/src/pointer-constraints-unstable-v1-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml %{prj.location}/src/pointer-constraints-unstable-v1-client-protocol-code.h",
-			"wayland-scanner client-header " .. wayland_protocols .. "/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml %{prj.location}/src/idle-inhibit-unstable-v1-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml %{prj.location}/src/idle-inhibit-unstable-v1-client-protocol-code.h",
-			"wayland-scanner client-header " .. wayland_protocols .. "/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml %{prj.location}/src/xdg-decoration-unstable-v1-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml %{prj.location}/src/xdg-decoration-unstable-v1-client-protocol-code.h",
-			"wayland-scanner client-header " .. wayland_protocols .. "/stable/viewporter/viewporter.xml %{prj.location}/src/viewporter-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/stable/viewporter/viewporter.xml %{prj.location}/src/viewporter-client-protocol-code.h",
-			"wayland-scanner client-header " .. wayland_protocols .. "/staging/fractional-scale/fractional-scale-v1.xml %{prj.location}/src/fractional-scale-v1-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/staging/fractional-scale/fractional-scale-v1.xml %{prj.location}/src/fractional-scale-v1-client-protocol-code.h",
-			"wayland-scanner client-header " .. wayland_protocols .. "/staging/xdg-activation/xdg-activation-v1.xml %{prj.location}/src/xdg-activation-v1-client-protocol.h",
-			"wayland-scanner private-code " .. wayland_protocols .. "/staging/xdg-activation/xdg-activation-v1.xml %{prj.location}/src/xdg-activation-v1-client-protocol-code.h",
-            -- add others as needed
-        }
 
 	filter "system:macosx"
 		pic "On"
